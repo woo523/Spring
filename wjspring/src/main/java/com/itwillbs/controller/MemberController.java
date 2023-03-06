@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.itwillbs.domain.MemberDTO;
+import com.itwillbs.service.MemberService;
+import com.itwillbs.service.MemberServiceImpl;
 
 @Controller
 public class MemberController {
@@ -86,16 +88,28 @@ public class MemberController {
 //		memberDTO.setId(request.getParameter("id"));
 //		memberDTO.setPass(request.getParameter("pass"));
 //		memberDTO.setName(request.getParameter("name"));
-		System.out.println(memberDTO.getId());
-		System.out.println(memberDTO.getPass());
-		System.out.println(memberDTO.getName());
+
 		// 스프링 insertForm.jsp id, pass, name 태그이름 입력된 값이 서버에 전달되면
 		// request에 저장 => MemberDTO 객체 생성 => 멤버변수 id, pass, name 이름이 동일하면
 		// 자동으로 setId() 메서드 호출되어지고 request.getParameter("id")를 동작해서 값 저장
+		System.out.println(memberDTO.getId());
+		System.out.println(memberDTO.getPass());
+		System.out.println(memberDTO.getName());
 		
-				
-		// 처리작업
-		// 자바 파일 메서드 호출 회원가입 처리 => 처리 => 디비
+		// MemberFrontController 주소매핑 호출 
+		// => MemberInsertPro.java execute() 호출 -> MemberDAO insertMember()		
+		// 자바 파일 메서드 호출 회원가입 처리 => MemberService 처리 => MemberDAO 디비
+		// 주소매핑 MemberController
+		// -> 처리 패키지 com.itwillbs.service
+		// -> 처리 MemberService 인터페이스 MemberServiceImpl 클래스 insertMember()
+		// -> 디비 패키지 com.itwillbs.dao
+		// -> 디비 MemberDAO 인터페이스 MemberDAOImpl 클래스 insertMember()
+		
+		// MemberService 부모 = MemberServiceImpl 자식 객체생성
+		MemberService memberService = new MemberServiceImpl();
+		// 메서드 호출
+		memberService.insertMember(memberDTO);
+		
 		// 로그인 페이지로 이동
 		return "redirect:/member/login";
 	}

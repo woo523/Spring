@@ -1,4 +1,4 @@
-package com.wj.mygit;
+package com.itwillbs.mygit;
 
 import java.text.DateFormat;
 import java.util.Date;
