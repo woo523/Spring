@@ -18,7 +18,7 @@ String id=(String)session.getAttribute("id");
 // }
 %>
 <%=id %>님 로그인 하셨습니다.
-<a href="MemberLogout.me">로그아웃</a><br>
+<a href="${pageContext.request.contextPath}/member/logout">로그아웃</a><br>
 <a href="${pageContext.request.contextPath}/member/info">회원정보조회</a><br>
 <a href="${pageContext.request.contextPath}/member/update">회원정보수정</a><br>
 <a href="${pageContext.request.contextPath}/member/delete">회원정보삭제</a><br>
