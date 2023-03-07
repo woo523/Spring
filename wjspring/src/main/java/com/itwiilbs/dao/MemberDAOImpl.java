@@ -11,4 +11,12 @@ public class MemberDAOImpl implements MemberDAO{
 		System.out.println("MemberDAOImpl insertMember()");
 	}
 
-}
+	@Override
+	public MemberDTO userCheck(MemberDTO memberDTO) {
+		System.out.println("MemberDAOImpl userCheck()");
+		return null;
+	}
+		
+	}
+
+

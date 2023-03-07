@@ -1,5 +1,6 @@
 package com.itwillbs.controller;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,32 @@ public class MemberController {
 	// 서블릿이 동작하기 전에 서버에서 request, response 서버 내장객체 생성 => 서버 기억장소 할당
     // request 기억장소 안에 사용자가 입력한 파라미터 정보(태그 입력한 정보), 서버 정보, 클라이언트 정보, 세션 정보, 쿠키 정보 저장
 	
+	// 멤버변수 부모 = 자식 객체생성
+//	MemberService memberService = new MemberServiceImpl();
+	
+	// 스프링 3버전 자동으로 객체생성
+	// 멤버변수 부모 공통적인 틀 선언 => 데이터 은닉
+	// 스프링파일 root-context.xml 객체생성
+	// MemberController 파일에 멤버변수 memberService 전달
+	
+	// 멤버변수 데이터 은닉
+	private MemberService memberService;
+	
+	// 멤버변수 값을 전달 생성자, set메서드 통해서 전달
+	// 생성자
+//	public MemberController(MemberService memberService) {
+//		this.memberService = memberService;
+//	}
+	// set 메서드
+	@Inject
+	public void setMemberService(MemberService memberService) {
+		this.memberService = memberService;
+	}
+	// 스프링 4버전 자동으로 객체생성
+	// 멤버변수 부모 공통적인 틀 선언 => 데이터 은닉
+	// 부모를 상속받은 자식 클래스 자동으로 찾아옴
+//	@Inject 
+//	private MemberService memberService;
 	
 	// 가상주소 http://localhost:8080/myweb/member/insert
 	// 주소매핑 -> member/insertForm.jsp
@@ -37,6 +64,8 @@ public class MemberController {
 		// return "redirect:/member/login";
 	}
 	
+
+
 	@RequestMapping(value = "/member/login", method = RequestMethod.GET)
 	public String login() {
 		
@@ -106,7 +135,7 @@ public class MemberController {
 		// -> 디비 MemberDAO 인터페이스 MemberDAOImpl 클래스 insertMember()
 		
 		// MemberService 부모 = MemberServiceImpl 자식 객체생성
-		MemberService memberService = new MemberServiceImpl();
+//		MemberService memberService = new MemberServiceImpl();
 		// 메서드 호출
 		memberService.insertMember(memberDTO);
 		
@@ -121,6 +150,14 @@ public class MemberController {
 		// 디비 로그인 처리 => 처리 => 디비 자바 메서드 호출
 		System.out.println(memberDTO.getId());
 		System.out.println(memberDTO.getPass());
+		
+		// MemberLoginPro.java execute() 대신
+		// MemberService 부모 = MemberServiceImpl 자식 객체생성
+//		MemberService memberService = new MemberServiceImpl();
+		// 리턴할형 MemberDTO userCheck() 메서드 정의
+		// MemberDTO memberDTO2 = userCheck(id, pass) 메서드 호출
+		MemberDTO memberDTO2 = memberService.userCheck(memberDTO);
+		
 		return "redirect:/member/main";
 	}
 	

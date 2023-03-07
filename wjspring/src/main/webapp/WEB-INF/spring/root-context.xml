@@ -4,5 +4,40 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
-	<!-- 데이터베이스 설정 -->
+
+	
+	<!-- MemberController 객체생성 -->
+	<!-- <bean id="변수이름" class="자바파일"></bean> -->
+	<bean id="memberController" class="com.itwillbs.controller.MemberController">
+	<!-- 생성자 호출, 생성자 전달 변수 name="memberService",
+		 객체 생성한 참조변수 ref="memberService" -->
+<!-- 		<constructor-arg name="memberService" ref="memberService"> </constructor-arg> -->
+
+	<!-- set 메서드 호출 set 메서드 이름 name="memberService"
+	     객체 생성한 참조변수 ref="memberService" -->
+		<property name="memberService" ref="memberService"></property>
+	</bean>
+	
+	<!-- MemberServiceImpl 객체생성 (id = 부모변수)
+		 MemberService memberService = new MemberServiceImpl() -->
+	<bean id="memberService" class="com.itwillbs.service.MemberServiceImpl">
+		<property name="memberDAO" ref="memberDAO"></property>
+	</bean>
+	
+	<!-- MemberDAOImpl 객체생성 -->
+	<bean id="memberDAO" class="com.itwiilbs.dao.MemberDAOImpl"></bean>
+
+	<!-- 디비연동을 하기 위해서 JDBC프로그램 필요 
+		 JDBC프로그램 수동 설치 WEB-INF lib => JDBC 프로그램 설치(복사 붙여 넣기)
+		 JDBC프로그램 자동 설치 Maven을 자동으로 설치 
+		 pom.xml 파일 설치할 프로그램 목록을 넣고 자동으로 Maven 저장소에서 자동으로 프로그램 다운 받아짐
+		 https://mvnrepository.com/  MySQL Connector Java >> 8.0.32 버전 선택
+		  -->
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+<!-- 	<dependency> -->
+<!--   	  <groupId>mysql</groupId> -->
+<!--    	 <artifactId>mysql-connector-java</artifactId> -->
+<!--    	 <version>8.0.32</version> -->
+<!-- 	</dependency> -->
+	
 </beans>
