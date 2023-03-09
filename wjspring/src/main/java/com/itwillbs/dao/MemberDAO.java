@@ -1,4 +1,4 @@
-package com.itwiilbs.dao;
+package com.itwillbs.dao;
 
 import com.itwillbs.domain.MemberDTO;
 

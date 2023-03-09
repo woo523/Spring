@@ -2,6 +2,7 @@ package com.itwillbs.controller;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +27,7 @@ public class MemberController {
 	// 스프링파일 root-context.xml 객체생성
 	// MemberController 파일에 멤버변수 memberService 전달
 	
-	// 멤버변수 데이터 은닉
-	private MemberService memberService;
+	//	private MemberService memberService;
 	
 	// 멤버변수 값을 전달 생성자, set메서드 통해서 전달
 	// 생성자
@@ -35,15 +35,18 @@ public class MemberController {
 //		this.memberService = memberService;
 //	}
 	// set 메서드
-	@Inject
-	public void setMemberService(MemberService memberService) {
-		this.memberService = memberService;
-	}
+//	@Inject
+//	public void setMemberService(MemberService memberService) {
+//		this.memberService = memberService;
+//	}
+	
 	// 스프링 4버전 자동으로 객체생성
 	// 멤버변수 부모 공통적인 틀 선언 => 데이터 은닉
 	// 부모를 상속받은 자식 클래스 자동으로 찾아옴
-//	@Inject 
-//	private MemberService memberService;
+	// 데이터 은닉된 부모 인터페이스 멤버변수에 xml에서 객체생성해서
+	// set메서드 통해서 전달
+	@Inject 
+	private MemberService memberService;
 	
 	// 가상주소 http://localhost:8080/myweb/member/insert
 	// 주소매핑 -> member/insertForm.jsp
@@ -144,7 +147,7 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/member/loginPro", method = RequestMethod.POST)
-	public String loginPro(MemberDTO memberDTO) {
+	public String loginPro(MemberDTO memberDTO, HttpSession session) {
 		System.out.println("MemberController loginPro()");
 		// 처리 작업
 		// 디비 로그인 처리 => 처리 => 디비 자바 메서드 호출
@@ -158,7 +161,20 @@ public class MemberController {
 		// MemberDTO memberDTO2 = userCheck(id, pass) 메서드 호출
 		MemberDTO memberDTO2 = memberService.userCheck(memberDTO);
 		
-		return "redirect:/member/main";
+		if(memberDTO2!=null) {
+			//아이디 비밀번호 일치
+			System.out.println("아이디 비밀번호 일치");
+			// 회원이 일치하다라는 표시 
+			// => 페이지 상관없이 값이 계속 유지가 되도록 설정
+			// => 세션의 특징을 이용해서 => 세션 기억장소 안에 유지할 값 저장해놓고 어디서나 사용가능
+			// 세션객체 받아와서 세션 사용
+			session.setAttribute("id", memberDTO.getId());
+			return "redirect:/member/main";
+		}else {
+			//아이디 비밀번호 틀림
+			System.out.println("아이디 비밀번호 틀림");
+			return "member/msg";
+		}
 	}
 	
 	@RequestMapping(value = "/member/logout", method = RequestMethod.GET)

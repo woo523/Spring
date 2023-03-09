@@ -8,30 +8,55 @@
 	
 	<!-- MemberController 객체생성 -->
 	<!-- <bean id="변수이름" class="자바파일"></bean> -->
-	<bean id="memberController" class="com.itwillbs.controller.MemberController">
+<!-- 	<bean id="memberController" class="com.itwillbs.controller.MemberController"> -->
 	<!-- 생성자 호출, 생성자 전달 변수 name="memberService",
 		 객체 생성한 참조변수 ref="memberService" -->
 <!-- 		<constructor-arg name="memberService" ref="memberService"> </constructor-arg> -->
 
 	<!-- set 메서드 호출 set 메서드 이름 name="memberService"
 	     객체 생성한 참조변수 ref="memberService" -->
-		<property name="memberService" ref="memberService"></property>
-	</bean>
+<!-- 		<property name="memberService" ref="memberService"></property> -->
+<!-- 	</bean> -->
 	
 	<!-- MemberServiceImpl 객체생성 (id = 부모변수)
 		 MemberService memberService = new MemberServiceImpl() -->
-	<bean id="memberService" class="com.itwillbs.service.MemberServiceImpl">
-		<property name="memberDAO" ref="memberDAO"></property>
-	</bean>
+<!-- 	<bean id="memberService" class="com.itwillbs.service.MemberServiceImpl"> -->
+<!-- 		<property name="memberDAO" ref="memberDAO"></property> -->
+<!-- 	</bean> -->
 	
 	<!-- MemberDAOImpl 객체생성 -->
-	<bean id="memberDAO" class="com.itwiilbs.dao.MemberDAOImpl"></bean>
+<!-- 	<bean id="memberDAO" class="com.itwiilbs.dao.MemberDAOImpl"> -->
+<!-- 		<property name="dataSource" ref="dataSource"></property> -->
+<!-- 	</bean> -->
+
+	<!-- 디비연결 객체생성 -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+		<property name="url" value="jdbc:mysql://localhost:3306/jspdb1"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="1234"></property>
+	</bean>
+	
+	<!-- MyBatis 설정 객체생성 
+		 dataSOurce  가져오기
+		 configLocation Mybatis 환경설정 파일 위치 지정 
+		 mapperLocations Mybatis sql구문이 있는 파일 위치 지정-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
+		<property name="mapperLocations" value="classpath:mappers/**/*Mapper.xml"></property>
+	</bean>
+	
+	<!-- Mybatis 사용하는 객체생성 => MemberDAOImpl에서 자동으로 객체생성-->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+		<constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+	</bean>
 
 	<!-- 디비연동을 하기 위해서 JDBC프로그램 필요 
 		 JDBC프로그램 수동 설치 WEB-INF lib => JDBC 프로그램 설치(복사 붙여 넣기)
 		 JDBC프로그램 자동 설치 Maven을 자동으로 설치 
 		 pom.xml 파일 설치할 프로그램 목록을 넣고 자동으로 Maven 저장소에서 자동으로 프로그램 다운 받아짐
-		 https://mvnrepository.com/  MySQL Connector Java >> 8.0.32 버전 선택
+		 https://mvnrepository.com/  MySQL Connector Java >> 8.0.32 버전 선택 >> 소스 복사하여 pom.xml에 복사
 		  -->
 		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
 <!-- 	<dependency> -->
@@ -39,5 +64,8 @@
 <!--    	 <artifactId>mysql-connector-java</artifactId> -->
 <!--    	 <version>8.0.32</version> -->
 <!-- 	</dependency> -->
+<!--  https://mvnrepository.com/ spring jdbc 복사 -->
+
+
 	
 </beans>
