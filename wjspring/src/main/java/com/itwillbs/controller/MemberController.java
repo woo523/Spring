@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -82,14 +83,26 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/member/info", method = RequestMethod.GET)
-	public String info() {
+	public String info(HttpSession session, Model model) {
+		System.out.println("MemberController info()");
+		String id=(String)session.getAttribute("id");
+		MemberDTO memberDTO = memberService.getMember(id);
+		
+		// memberDTO를 들고 member/info.jsp로 이동
+		// request.setAttribute("memberDTO",memberDTO);
+		// request 대신에 스프링 제공 Model 담아서 이동
+		model.addAttribute("memberDTO", memberDTO);
 		
 		return "member/info";
 	}
 	
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
-	public String update() {
-		
+	public String update(HttpSession session, Model model) {
+		System.out.println("MemberController update()");
+		String id=(String)session.getAttribute("id");
+		MemberDTO memberDTO = memberService.getMember(id);
+
+		model.addAttribute("memberDTO", memberDTO);
 		return "member/updateForm";
 	}
 	
@@ -178,24 +191,51 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/member/logout", method = RequestMethod.GET)
-	public String logout() {
+	public String logout(HttpSession session) {
 		System.out.println("MemberController logout()");
-
+		session.invalidate();
 		return "redirect:/member/main";
 	}
 	
 	@RequestMapping(value = "/member/updatePro", method = RequestMethod.POST)
-	public String updatePro() {
+	public String updatePro(MemberDTO memberDTO) {
 		System.out.println("MemberController updatePro()");
 		// 디비 수정 처리 => 처리 => 디비 자바 메서드 호출
-		return "redirect:/member/main";
+		MemberDTO memberDTO2 = memberService.userCheck(memberDTO);
+		
+		if(memberDTO2!=null) {
+			//아이디 비밀번호 일치
+			System.out.println("아이디 비밀번호 일치");
+			// 수정작업
+			memberService.updateMember(memberDTO);
+			return "redirect:/member/main";
+		}else {
+			//아이디 비밀번호 틀림
+			System.out.println("아이디 비밀번호 틀림");
+			return "member/msg";
+		}
+		
 	}
 	
 	@RequestMapping(value = "/member/deletePro", method = RequestMethod.POST)
-	public String deletePro() {
+	public String deletePro(MemberDTO memberDTO, HttpSession session) {
 		System.out.println("MemberController deletePro()");
 		// 디비 삭제 처리 => 처리 => 디비 자바 메서드 호출
-		return "redirect:/member/main";
+		MemberDTO memberDTO2 = memberService.userCheck(memberDTO);
+		
+		if(memberDTO2!=null) {
+			//아이디 비밀번호 일치
+			System.out.println("아이디 비밀번호 일치");
+			// 삭제작업
+			memberService.deleteMember(memberDTO);
+			session.invalidate();
+			return "redirect:/member/main";
+		}else {
+			//아이디 비밀번호 틀림
+			System.out.println("아이디 비밀번호 틀림");
+			return "member/msg";
+		}
+
 	}
 	
 	

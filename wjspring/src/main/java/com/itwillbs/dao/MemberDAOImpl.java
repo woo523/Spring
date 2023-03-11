@@ -20,7 +20,7 @@ public class MemberDAOImpl implements MemberDAO{
 	// 마이바티스 디비연결 객체생성	
 	// 은닉 멤버 변수
 	// @Inject => root-context.xml 파일 객체 생성된 "sqlSession" 찾아서 자동으로 가져옴
-	@Inject
+	@Inject // context.xml 자동으로 찾아감
 	private SqlSession sqlSession;
 		
 	
@@ -63,6 +63,29 @@ public class MemberDAOImpl implements MemberDAO{
 		// selectOne 리턴값이 MemberDTO 하나일때 사용
 		return sqlSession.selectOne(namespace+".userCheck", memberDTO);
 	}
+
+	@Override
+	public MemberDTO getMember(String id) {
+		System.out.println("MemberDAOImpl getMember()");
+		
+		// selectOne 리턴값이 MemberDTO 하나일때 사용
+		return sqlSession.selectOne(namespace+".getMember", id);
+	}
+
+	@Override
+	public void updateMember(MemberDTO memberDTO) {
+		System.out.println("MemberDAOImpl updateMember()");
+		sqlSession.update(namespace+".updateMember",memberDTO);
+	}
+
+
+	@Override
+	public void deleteMember(MemberDTO memberDTO) {
+		System.out.println("MemberDAOImpl updateMember()");
+		sqlSession.update(namespace+".deleteMember",memberDTO);
+	}
+
+
 		
 	}
 

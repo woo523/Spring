@@ -23,9 +23,9 @@
 %>
 
 <form action="${pageContext.request.contextPath}/member/updatePro" method="post">
-아이디 : <input type="text" name="id" value="<%//=dto.getId()%>" readonly><br>
+아이디 : <input type="text" name="id" value="${memberDTO.id }" readonly><br>
 비밀번호 : <input type="password" name="pass"><br>
-이름 : <input type="text" name="name" value="<%//=dto.getName()%>"><br>
+이름 : <input type="text" name="name" value="${memberDTO.name }"><br>
 <input type="submit" value="회원정보수정">
 </form>
 

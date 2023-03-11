@@ -20,12 +20,12 @@
 // MemberDTO dto=dao.getMember(id);
 // dto 주소를 찾아가서 id,pass,name, date 가져오기=> 출력
 // MemberDTO dto=(MemberDTO)request.getAttribute("dto");
-	%>
-아이디 : <%//=dto.getId()%><br>
-비밀번호 : <%//=dto.getPass() %><br>
-이름 : <%//=dto.getName() %><br>
-가입날짜 : <%//=dto.getDate() %><br>	
+%>
+아이디 : ${memberDTO.id }<br>
+비밀번호 : ${memberDTO.pass }<br>
+이름 : ${memberDTO.name }<br>
+가입날짜 : ${memberDTO.date }<br>	
 
-<a href="MemberMain.me">메인으로 이동</a>
+<a href="${pageContext.request.contextPath}/member/main">메인으로 이동</a>
 </body>
 </html>
